@@ -4,6 +4,7 @@ import (
 	"golang.org/x/image/bmp"
 	"image"
 	"image/color"
+	"internshipApplicationTemplate/internal/config"
 	"internshipApplicationTemplate/internal/makeuuid"
 	"log"
 	"os"
@@ -28,13 +29,14 @@ func NewImage(width string, height string) (string, error) {
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
-			img.Set(x, y, color.White)
+			img.Set(x, y, color.Black)
 		}
 	}
 
 	fileName := uuid + ".bmp"
+	filePath := config.Cfg.FilePath + fileName
 
-	f, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Println("create file error")
 		return "", err
@@ -52,6 +54,8 @@ func NewImage(width string, height string) (string, error) {
 		log.Println("bmp encoding error")
 		return "", err
 	}
+
+	r = append(r, uuid)
 
 	return uuid, nil
 }
